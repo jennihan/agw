@@ -1,0 +1,96 @@
+create_resource_group = false
+resource_group_name = "AZRG-AGWV2"
+location = "canadacentral"
+vnet_resource_group_name = "AZRG-VNET"
+virtual_network_name = "azcacjhcldvetdev01"
+subnet_name = "azcacagwsbn02"
+key_vault_resource_group_name = "tfe-poc"
+key_vault_name = "tfeakv"
+app_gateway_name = "azcacjhagwdev01"
+app_gateway_public_ip_name = "azcacjhpipdev01"
+zones = []
+sku = {
+    capacity = 1
+    name = "WAF_v2"
+    tier = "WAF_v2"
+  }
+autoscale_configuration = null
+private_ip_address = "10.0.3.10"
+application_endpoints = [
+    {
+        application = "contoso.com"
+        backend_pool_fqdns = ["appinsightdemojh.azurewebsites.net"]
+        http_settings_port = 443
+        cookie_based_affinity = "Disabled"
+        http_settings_override_host_name = "appinsightdemojh.azurewebsites.net"
+        override_backend_path    = "/abc"
+        probe_host_name = "appinsightdemojh.azurewebsites.net"
+        listener_host_name = "contoso.com"
+        ssl_certificate_name    = "contoso"
+        interval                = 30
+        probe_path              = "/"
+        probe_timeout                 = 30
+        unhealthy_threshold     = 3
+    },
+    #     {
+    #     application = "jh.com"
+    #     backend_pool_fqdns = ["jhcom.azurewebsites.net"]
+    #     http_setting_port = "80"
+    #     cookie_based_affinity = "Enabled"
+    #     affinity_cookie_name  = "jh.com"
+    #     http_setting_override_host_name = "jhcom.azurewebsites.net"
+    #     probe_host_name = "jhcom.azurewebsites.net"
+    #     listener_host_name = "jh.com"
+    #     ssl_certificate_name    = "jh"
+    #     interval                = 30
+    #     probe_path                    = "/"
+    #     timeout                 = 30
+    #     unhealthy_threshold     = 3
+    # }
+    {
+        application = "vmalert"
+        ip_addresses = ["10.0.0.4"]
+        http_settings_port = "80"
+        cookie_based_affinity = "Enabled"
+        affinity_cookie_name  = "jh.com"
+        #http_settings_override_host_name = "jh.com"
+        #pick_host_name_from_backend_address = true
+        request_timeout = 300
+        probe_host_name = "10.0.0.4"
+        listener_host_name = "jh.com"
+        ssl_certificate_name    = "jh"
+        interval                = 30
+        probe_path                    = "/"
+        probe_timeout                 = 30
+        unhealthy_threshold     = 6
+    }    
+]
+
+ssl_certificates = {
+    
+    contoso = {
+        certificate_name     = "contoso"
+        key_vault_secret_id  = "https://tfeakv.vault.azure.net/secrets/contoso/"
+    },
+    jh = {
+        certificate_name     = "jh"
+        key_vault_secret_id  = "https://tfeakv.vault.azure.net/secrets/jh/"
+    }
+}
+
+identity_ids = ["/subscriptions/4105419f-e724-4a4b-89f4-0cee686b07f1/resourceGroups/AZRG-AGWV2/providers/Microsoft.ManagedIdentity/userAssignedIdentities/agw-msi"]
+
+storage_account_name = "artificates"
+storage_account_resource_group = "Artificates"
+
+waf_configuration = {
+    firewall_mode = "Detection"
+    rule_set_version = "3.1"
+    disabled_rule_group = []
+    exclusion = []
+}
+
+tags  = {
+    it_Environment = "dev"
+    server_Admin = "abc.com"
+}
